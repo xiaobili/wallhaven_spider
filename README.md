@@ -14,7 +14,7 @@ bs4 (BeautifulSoup)
 ## 运行
 #### WINDOWS
 ```bash
-管理员模式运行 run.bat
+双击运行 run.bat
 ```
 #### LINUX & MAC
 ```bash
