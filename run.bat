@@ -33,7 +33,7 @@ if %errorlevel% equ 0 (
     pip install %MODULE_NAME%
 )
 
-REM 检查是否安装模块
+
 python -c "import %BS4%" > nul 2>&1
 if %errorlevel% equ 0 (
     echo %BS4% already installed.
@@ -42,7 +42,7 @@ if %errorlevel% equ 0 (
     pip install %BS4%
 )
 
-REM 检查是否安装模块
+
 python -c "import %REQUESTS%" > nul 2>&1
 if %errorlevel% equ 0 (
     echo %REQUESTS% already installed.
