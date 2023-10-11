@@ -45,8 +45,8 @@ class Wallhaven:
 
     async def download_images(self):
         # 检测 images 文件夹是否存在
-        if not os.path.exists('../wallhaven/images'):
-            os.mkdir('../wallhaven/images')
+        if not os.path.exists('./images'):
+            os.mkdir('./images')
 
         for image in self.images:
             filename = image.split('/')[-1]

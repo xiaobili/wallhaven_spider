@@ -26,6 +26,7 @@ async def main():
         print('输入参数错误!')
         exit(0)
     for i in range(page_start, page_end + 1):
+        print('正在下载第' + str(i) + '页')
         final_url = url + '?page=' + str(i)
         wall = Wallhaven(final_url)
         await wall.get_images()
