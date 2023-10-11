@@ -17,3 +17,7 @@ pip install pyppeteer
 ```bash
 ./run.sh
 ```
+
+## 可能遇到的问题
+> 执行./run.sh 控制台输出 permission deny
+> 控制台执行 `chmod 777 ./run.sh`
