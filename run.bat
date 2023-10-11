@@ -11,6 +11,7 @@ set INSTALL_DIR=%ProgramFiles%\Python
 REM 设置需要检查的模块
 set MODULE_NAME=pyppeteer
 set BS4=bs4
+set REQUESTS=requests
 
 REM 检查是否已安装 Python
 reg query "HKLM\Software\Python\PythonCore\%PYTHON_VERSION%" > nul 2>&1
@@ -33,12 +34,21 @@ if %errorlevel% equ 0 (
 )
 
 REM 检查是否安装模块
-python -c "import %MODULE_NAME%" > nul 2>&1
+python -c "import %BS4%" > nul 2>&1
 if %errorlevel% equ 0 (
     echo %BS4% 模块已安装.
 ) else (
     echo %BS4% 模块未安装，自动安装 %BS4% 模块...
     pip install %BS4%
+)
+
+REM 检查是否安装模块
+python -c "import %REQUESTS%" > nul 2>&1
+if %errorlevel% equ 0 (
+    echo %REQUESTS% 模块已安装.
+) else (
+    echo %REQUESTS% 模块未安装，自动安装 %REQUESTS% 模块...
+    pip install %REQUESTS%
 )
 
 

@@ -26,21 +26,29 @@ function env_check() {
         echo "暂不支持该系统"
         exit 1
       fi
+  fi
 
 
 
   # 检查是否安装 pyppeteer
-  elif ! pip list | grep pyppeteer &> /dev/null
+  if ! pip3 list | grep pyppeteer &> /dev/null
   then
       echo "pyppeteer 未安装 正在安装中"
       pip3 install pyppeteer
-
+  fi
 
   # 检查是否安装 bs4
-  elif ! pip list | grep bs4 &> /dev/null
+  if ! pip3 list | grep bs4 &> /dev/null
   then
       echo "bs4 未安装 正在安装中"
       pip3 install bs4
+  fi
+
+  # 检查是否安装 requests
+  if ! pip3 list | grep requests &> /dev/null
+  then
+      echo "requests 未安装 正在安装中"
+      pip3 install requests
   fi
 }
 
