@@ -6,6 +6,7 @@ wallhaven壁纸网站爬虫
 
 ```bash
 python 3
+requests
 pyppeteer
 bs4 (BeautifulSoup)
 ```
@@ -18,7 +19,11 @@ pip install pyppeteer
 ```
 
 ## 运行
-
+### WINDOWS
+```bash
+管理员模式运行 run.bat
+```
+### LINUX & MAC
 ```bash
 ./run.sh
 ```
