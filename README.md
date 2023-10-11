@@ -11,19 +11,12 @@ pyppeteer
 bs4 (BeautifulSoup)
 ```
 
-### 安装依赖
-
-```bash
-pip install bs4
-pip install pyppeteer
-```
-
 ## 运行
-### WINDOWS
+#### WINDOWS
 ```bash
 管理员模式运行 run.bat
 ```
-### LINUX & MAC
+#### LINUX & MAC
 ```bash
 ./run.sh
 ```
