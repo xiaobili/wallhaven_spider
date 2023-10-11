@@ -6,34 +6,47 @@ function env_check() {
   if ! command -v python3 &> /dev/null
   then
       echo "python3 未安装"
-      exit
-  fi
+      # 获取系统类型
+      os_type=$(uname)
+      if [ "$os_type" == "Darwin" ]
+      then
+        echo "正在安装 python3"
+        brew install python3
+      elif [ "$os_type" == "Linux" ]
+      then
+        echo "正在安装 python3"
+        if [ -f "/etc/redhat-release" ]
+        then
+          yum install python3
+        elif [ -f "/etc/lsb-release" ]
+        then
+          apt-get install python3
+        fi
+      else
+        echo "暂不支持该系统"
+        exit 1
+      fi
 
-  # 检查是否安装 pip
- if ! command -v pip &> /dev/null
-  then
-      echo "pip 未安装"
-      exit
-  fi
+
 
   # 检查是否安装 pyppeteer
-  if ! pip list | grep pyppeteer &> /dev/null
+  elif ! pip list | grep pyppeteer &> /dev/null
   then
-      echo "pyppeteer 未安装 请使用 pip install pyppeteer 安装"
-      exit
-  fi
+      echo "pyppeteer 未安装 正在安装中"
+      pip3 install pyppeteer
+
 
   # 检查是否安装 bs4
-  if ! pip list | grep bs4 &> /dev/null
+  elif ! pip list | grep bs4 &> /dev/null
   then
-      echo "bs4 未安装 请使用 pip install bs4 安装"
-      exit
+      echo "bs4 未安装 正在安装中"
+      pip3 install bs4
   fi
 }
 
 function main() {
   env_check
-  python main.py
+  python3 main.py
 }
 
 main
