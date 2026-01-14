@@ -1,0 +1,8 @@
+{
+  "download_dir": "download",
+  "delay_between_requests": 0.5,
+  "max_pages_per_session": 10,
+  "image_formats": ["jpg", "jpeg", "png", "gif", "webp"],
+  "max_retries": 3,
+  "timeout": 30
+}
