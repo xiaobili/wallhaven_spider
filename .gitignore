@@ -1,3 +1,6 @@
 /.venv/*
 /.idea/*
 /download/*
+/build/*
+/dist/*
+wallhaven_spider.spec

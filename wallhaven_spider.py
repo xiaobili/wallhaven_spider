@@ -584,8 +584,8 @@ class WallhavenSpider:
 if __name__ == "__main__":
     try:
         # 配置文件位置在$WALLHAVEN_PATH/config.json
-        # config_file = os.environ.get('WALLHAVEN_PATH', '.') + '/config.json'
-        spider = WallhavenSpider('config.json')
+        config_file = os.environ.get('WALLHAVEN_PATH', '.') + '/config.json'
+        spider = WallhavenSpider(config_file)
         spider.run()
     except KeyboardInterrupt:
         print("\n程序被用户中断")
