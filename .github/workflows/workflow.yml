@@ -1,4 +1,3 @@
-#file:/Volumes/DATA/Code/Pycharm/Episode_Rename/.github/workflows/auto-tag-release.yml
 name: Auto Generate Tag and Release
 
 on:
@@ -106,8 +105,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest, macos-15-intel]
-        python-version: [3.12]
-        script: [interactive_episode_renamer, interactive_episode_renamer_with_rich]
+        python-version: [3.14]
+        script: [wallhaven_spider]
 
     steps:
     - uses: actions/checkout@v4
