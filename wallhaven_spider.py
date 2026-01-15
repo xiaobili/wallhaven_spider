@@ -69,14 +69,73 @@ class WallhavenSpider:
                 "timeout": 30
             }
 
+    def get_time_range_filter(self):
+        """获取时间范围筛选参数"""
+        print("\n请选择时间范围筛选:")
+        print("1. 全部时间 (all time)")
+        print("2. 最近一天 (1 day)")
+        print("3. 最近三天 (3 days)")
+        print("4. 最近一周 (1 week)")
+        print("5. 最近一个月 (1 month)")
+        print("6. 最近三个月 (3 months)")
+        print("7. 最近半年 (6 months)")
+        print("8. 最近一年 (1 year)")
+
+        choice_str = Prompt.ask("请输入选择 (1-8)", choices=["1", "2", "3", "4", "5", "6", "7", "8"], default="1")
+        choice = int(choice_str)
+
+        time_ranges = {
+            1: "all",
+            2: "1d",
+            3: "3d",
+            4: "1w",
+            5: "1M",
+            6: "3M",
+            7: "6M",
+            8: "1y"
+        }
+
+        return time_ranges[choice]
+
+    def get_resolution_filter(self):
+        """获取分辨率筛选参数"""
+        print("\n请选择分辨率筛选:")
+        print("1. 自定义分辨率 (custom)")
+        print("2. 1920x1080 (1080p)")
+        print("3. 2560x1440 (1440p)")
+        print("4. 3840x2160 (4K)")
+        print("5. 5120x2880 (5K)")
+        print("6. 7680x4320 (8K)")
+        print("7. 不筛选 (no filter)")
+
+        choice_str = Prompt.ask("请输入选择 (1-7)", choices=["1", "2", "3", "4", "5", "6", "7"], default="7")
+        choice = int(choice_str)
+
+        if choice == 1:
+            # 自定义分辨率
+            width = Prompt.ask("请输入宽度 (如: 1920)")
+            height = Prompt.ask("请输入高度 (如: 1080)")
+            return f"{width}x{height}"
+        elif choice == 2:
+            return "1920x1080"
+        elif choice == 3:
+            return "2560x1440"
+        elif choice == 4:
+            return "3840x2160"
+        elif choice == 5:
+            return "5120x2880"
+        elif choice == 6:
+            return "7680x4320"
+        else:  # choice == 7
+            return None
+
     def get_page_range(self):
         """询问用户要爬取的页面范围"""
         print("\n请选择页面范围:")
         print("1. 单页 (例如: 第1页)")
         print("2. 多页 (例如: 第1-5页)")
-        print("3. 所有页 (例如: 第1页到最后一页)")
 
-        choice_str = Prompt.ask("请输入选择 (1/2/3)", choices=["1", "2", "3"], default="1")
+        choice_str = Prompt.ask("请输入选择 (1/2)", choices=["1", "2"], default="1")
         choice = int(choice_str)
 
         if choice == 1:
@@ -113,33 +172,6 @@ class WallhavenSpider:
                 except ValueError:
                     self.console.print("[red]请输入有效的页码数字[/red]")
 
-            return list(range(start_page, end_page + 1))
-        else:  # 所有页
-            while True:
-                start_page_str = Prompt.ask("请输入起始页码", default="1")
-                try:
-                    start_page = int(start_page_str)
-                    if start_page > 0:
-                        break
-                    else:
-                        self.console.print("[red]页码必须是正整数，请重新输入[/red]")
-                except ValueError:
-                    self.console.print("[red]请输入有效的页码数字[/red]")
-
-            while True:
-                end_page_str = Prompt.ask("请输入结束页码 (输入0表示最后一页)", default="0")
-                try:
-                    end_page = int(end_page_str)
-                    if end_page >= 0:
-                        break
-                    else:
-                        self.console.print("[red]请输入有效的页码数字(非负数)[/red]")
-                except ValueError:
-                    self.console.print("[red]请输入有效的页码数字[/red]")
-            if end_page == 0:
-                # 这里应该动态获取总页数，暂时设为较大值
-                self.console.print("[yellow]注意: 由于无法自动获取总页数，将从起始页开始爬取[/yellow]")
-                return list(range(start_page, start_page + 5))  # 默认爬取5页
             return list(range(start_page, end_page + 1))
 
     def parse_wallpaper_extension(self, thumb_url):
@@ -179,7 +211,9 @@ class WallhavenSpider:
             url = f"{self.base_url}/latest"
             params['page'] = page_num
         else:
-            raise ValueError(f"不支持的分类: {category}")
+            # 对于自定义搜索，使用search接口
+            url = f"{self.base_url}/search"
+            params['page'] = page_num
 
         try:
             # 使用配置中的超时值
@@ -391,6 +425,20 @@ class WallhavenSpider:
         """按类别爬取壁纸"""
         self.console.print(f"[bold blue]开始爬取 {category} 类别壁纸...[/bold blue]")
 
+        # 获取筛选参数
+        time_range = self.get_time_range_filter()
+        resolution = self.get_resolution_filter()
+
+        # 准备参数
+        params = {'tag': tag} if tag else {}
+        
+        # 添加时间范围和分辨率筛选参数
+        if time_range != 'all':
+            params['topRange'] = time_range
+        if resolution:
+            params['resolutions'] = resolution
+            params['atleast'] = resolution  # 至少指定分辨率
+
         # 获取页面范围
         page_numbers = self.get_page_range()
 
@@ -407,9 +455,6 @@ class WallhavenSpider:
 
             for i, page_num in enumerate(page_numbers):
                 progress.update(overall_task, description=f"[cyan]正在爬取第 {page_num} 页...")
-
-                # 准备参数
-                params = {'tag': tag} if tag else {}
 
                 wallpapers = self.get_wallpapers_from_page(category, page_num, params)
                 all_wallpapers.extend(wallpapers)
